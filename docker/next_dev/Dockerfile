@@ -1,6 +1,6 @@
 FROM node:20-slim
-WORKDIR /app
 
-COPY . .
-RUN npm install
-RUN npm run dev
+RUN apt-get update && \
+    apt-get install -y git 
+
+WORKDIR /app

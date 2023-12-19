@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  test-project:
+    build: ./docker/next_dev/
+    container_name: next_dev
+    volumes: 
+      - ./:/app
+    ports:
+      - '3000:3000'
+    command: bash -c 'npm ci && rm -rf .next && npm run dev'
+      
