@@ -3,8 +3,8 @@ WORKDIR /app
 
 COPY  ./ /app
 
-RUN npm ci 
-RUN npm run build 
+RUN yarn install 
+RUN yarn build 
 
 FROM node:20-bullseye-slim AS runner
 WORKDIR /app
