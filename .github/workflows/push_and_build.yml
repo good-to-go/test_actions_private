@@ -3,6 +3,11 @@ name: Deploy Next.js container image to ECR
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      tag-name:
+        type: string
+        required: true
+        description: 'tag name'
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -18,7 +23,15 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - uses: actions/checkout@v3
+       
+      - name: checkout
+        uses: actions/checkout@v4
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
       # AWS 認証
       - uses: aws-actions/configure-aws-credentials@v1
@@ -41,5 +54,5 @@ jobs:
           # 今回は Git のコミットハッシュにしておく
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:test1 -f ./Dockerfile --no-cache=true .
-          docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:test1
+          docker buildx build --platform=arm64 -t ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.event.inputs.tag-name }} -f ./Dockerfile --no-cache=true .
+          docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.event.inputs.tag-name }}
