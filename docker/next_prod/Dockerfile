@@ -1,4 +1,4 @@
-FROM node:20-bullseye-slim AS builder
+FROM node:18.15-slim AS builder
 WORKDIR /app
 
 COPY  ./ /app
@@ -7,7 +7,7 @@ ENV NODE_ENV production
 RUN yarn install --frozen-lockfile
 RUN yarn build 
 
-FROM node:20-bullseye-slim AS runner
+FROM node:18.15-slim AS runner
 WORKDIR /app
 
 # COPY --from=builder /app/next.config.js ./
