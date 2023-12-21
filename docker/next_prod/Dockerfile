@@ -3,6 +3,7 @@ WORKDIR /app
 
 COPY  ./ /app
 
+ENV NODE_ENV production
 RUN yarn install --frozen-lockfile
 RUN yarn build 
 
